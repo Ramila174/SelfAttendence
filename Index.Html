@@ -1,0 +1,1426 @@
+<!DOCTYPE html>
+<html lang="gu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ખંડેવાળ પ્રાથમિક શાળા - સ્માર્ટ હાજરી મેનેજમેન્ટ સિસ્ટમ</title>
+    
+    <!-- Favicon Icon -->
+    <link rel="icon" href="icon.png" type="image/png">
+    
+    <!-- Bootstrap 5 CSS CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%); font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; min-height: 100vh; color: #1e293b; }
+        .header-banner { background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%); color: white; border-radius: 24px; padding: 30px; box-shadow: 0 15px 35px rgba(30,58,138,0.2); border-bottom: 6px solid #fbbf24; }
+        .school-icon-box { width: 100px; height: 100px; border-radius: 50%; border: 4px solid #ffffff; box-shadow: 0 8px 20px rgba(0,0,0,0.2); background: white; margin: 0 auto; display: flex; align-items: center; justify-content: center; font-size: 45px; transition: transform 0.3s ease; overflow: hidden; }
+        .school-icon-box:hover { transform: scale(1.08); }
+        .card { border: none; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.06); background: #ffffff; transition: all 0.3s ease; overflow: hidden; }
+        .card:hover { transform: translateY(-3px); box-shadow: 0 15px 30px rgba(0,0,0,0.1); }
+        .btn { border-radius: 30px; padding: 10px 24px; font-weight: 600; transition: all 0.2s ease-in-out; box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+        .btn:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(0,0,0,0.15); }
+        
+        .floating-bubble {
+            position: fixed;
+            pointer-events: none;
+            font-size: 26px;
+            animation: bubbleFloat 0.8s ease-out forwards;
+            z-index: 9999;
+        }
+        @keyframes bubbleFloat {
+            0% { transform: translateY(0) scale(0.5); opacity: 1; }
+            100% { transform: translateY(-70px) scale(1.4); opacity: 0; }
+        }
+
+        .stat-badge { font-size: 16px; padding: 12px 18px; border-radius: 14px; font-weight: bold; }
+        .division-card { cursor: pointer; transition: all 0.3s ease; border: 2px solid transparent; }
+        .division-card:hover { border-color: #3b82f6; transform: translateY(-5px); }
+
+        .certificate-box { 
+            border: 4px double #d4af37; 
+            padding: 30px; 
+            background: linear-gradient(135deg, #fffdf0 0%, #fff8d6 100%); 
+            border-radius: 20px; 
+            text-align: center; 
+            box-shadow: 0 10px 30px rgba(212, 175, 55, 0.25);
+            position: relative;
+            overflow: hidden;
+        }
+        .certificate-box::before { content: '🌟'; position: absolute; top: 10px; left: 15px; font-size: 24px; }
+        .certificate-box::after { content: '🌟'; position: absolute; top: 10px; right: 15px; font-size: 24px; }
+
+        .form-control, .form-select { border-radius: 14px; padding: 12px 18px; border: 1px solid #cbd5e1; box-shadow: inset 0 1px 3px rgba(0,0,0,0.03); background-color: #f8fafc; }
+        .form-control:focus, .form-select:focus { border-color: #3b82f6; background-color: #fff; box-shadow: 0 0 0 0.25rem rgba(59, 130, 246, 0.2); }
+        footer { margin-top: 50px; padding: 25px; background: #1e3a8a; color: white; text-align: center; border-radius: 20px; box-shadow: 0 10px 25px rgba(30,58,138,0.2); }
+        table { border-radius: 12px; overflow: hidden; }
+    </style>
+</head>
+<body>
+
+    <div class="container my-4">
+        
+        <!-- Header Section -->
+        <div class="header-banner mb-4">
+            <div class="row align-items-center text-center">
+                <div class="col-md-3 mb-3 mb-md-0">
+                    <div class="school-icon-box">
+                        <img src="logo.jpg" alt="શાળા લોગો" class="w-100 h-100" style="object-fit: cover;" onerror="this.onerror=null;this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'100\' height=\'100\'><text x=\'50%\' y=\'50%\' font-size=\'45\' dominant-baseline=\'middle\' text-anchor=\'middle\'>🏫</text></svg>';">
+                    </div>
+                    <div class="small mt-2 fw-bold text-warning">શાળા લોગો</div>
+                </div>
+                <div class="col-md-6 mb-3 mb-md-0">
+                    <h3 class="fw-bold mb-1 text-warning">જય માતાજી 🙏</h3>
+                    <h1 class="fw-bold mb-2 text-white display-6">ખંડેવાળ પ્રાથમિક શાળા</h1>
+                    <p class="mb-0 text-light fs-6">ઓનલાઇન હાજરી અને વાલી સંચાર સિસ્ટમ (બાલવાટીકા થી ૮)</p>
+                </div>
+                <div class="col-md-3">
+                    <div class="school-icon-box">
+                        <img src="mataji.jpg" alt="માતાજીનો ફોટો" class="w-100 h-100" style="object-fit: cover;" onerror="this.onerror=null;this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'100\' height=\'100\'><text x=\'50%\' y=\'50%\' font-size=\'45\' dominant-baseline=\'middle\' text-anchor=\'middle\'>🕉️</text></svg>';">
+                    </div>
+                    <div class="small mt-2 fw-bold text-warning">જય માતાજી</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 1. Home Page / Division Selection Cards -->
+        <div id="divisionSelectionSection" class="row justify-content-center my-5">
+            <div class="col-md-5 mb-4">
+                <div class="card p-5 text-center division-card shadow-sm h-100 bg-white" onclick="selectDivision('primary')">
+                    <div class="display-4 mb-3">🎒</div>
+                    <h3 class="fw-bold text-success mb-2">પ્રાથમિક વિભાગ</h3>
+                    <p class="text-muted mb-4">બાલવાટીકા, ધોરણ ૧, ૨, ૩, ૪ અને ૫ ની દૈનિક હાજરી, રિપોર્ટ અને વાલી સંચાર</p>
+                    <button class="btn btn-success mt-auto w-100 py-2 fw-bold" onclick="selectDivision('primary'); event.stopPropagation();">વિભાગ પસંદ કરો</button>
+                </div>
+            </div>
+            <div class="col-md-5 mb-4">
+                <div class="card p-5 text-center division-card shadow-sm h-100 bg-white" onclick="selectDivision('upper_primary')">
+                    <div class="display-4 mb-3">🏛️</div>
+                    <h3 class="fw-bold text-primary mb-2">ઉચ્ચ પ્રાથમિક વિભાગ</h3>
+                    <p class="text-muted mb-4">ધોરણ ૬, ૭ અને ૮ ની દૈનિક હાજરી, રિપોર્ટ અને વાલી સંચાર</p>
+                    <button class="btn btn-primary mt-auto w-100 py-2 fw-bold" onclick="selectDivision('upper_primary'); event.stopPropagation();">વિભાગ પસંદ કરો</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation Buttons -->
+        <div id="appNavbar" class="text-center mb-4" style="display: none;">
+            <button class="btn btn-outline-dark m-1 px-4 py-2 shadow-sm" onclick="showSection('attendanceSection')">🏠 હોમ પેજ</button>
+            <button class="btn btn-success m-1 px-4 py-2 shadow-sm" onclick="showSection('attendanceSection')">📋 દૈનિક હાજરી પૂરવી</button>
+            <button class="btn btn-dark m-1 px-4 py-2 shadow-sm" onclick="showSection('loginSection')">🔐 શિક્ષક (એડમિન) લોગિન</button>
+        </div>
+
+        <!-- 2. Student Daily Attendance Page -->
+        <div id="attendanceSection" class="card p-4 mb-4 shadow-sm" style="display: none;">
+            <div class="d-flex justify-content-between align-items-center mb-4 border-bottom pb-3">
+                <h4 id="attendanceHeading" class="text-primary fw-bold mb-0">📋 દૈનિક હાજરી પૂરવી</h4>
+                <button class="btn btn-outline-secondary btn-sm px-3" onclick="backToDivisionSelection()">⬅️ વિભાગ બદલો</button>
+            </div>
+            
+            <div class="row g-3 mb-4 bg-light p-3 rounded-4 shadow-sm">
+                <div class="col-md-4">
+                    <label class="form-label fw-bold text-secondary">ધોરણ પસંદ કરો:</label>
+                    <select id="selectStd" class="form-select" onchange="loadClassStudentsForAttendance()"></select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label fw-bold text-secondary">વર્ગ (Section) પસંદ કરો:</label>
+                    <select id="selectSec" class="form-select" onchange="loadClassStudentsForAttendance()">
+                        <option value="A">વર્ગ A</option>
+                        <option value="B">વર્ગ B</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label fw-bold text-secondary">તારીખ (દિવસ/માસ/વર્ષ):</label>
+                    <input type="date" id="attendanceDate" class="form-control" onchange="checkHolidayWarning()">
+                </div>
+            </div>
+            
+            <div id="holidayAlertMsg" class="alert alert-warning fw-bold shadow-sm" style="display: none;"></div>
+
+            <div id="studentAttendanceContainer" style="display: none;">
+                
+                <!-- Live Summary Statistics Bar -->
+                <div class="row g-3 text-center my-3">
+                    <div class="col-md-4">
+                        <div class="bg-white border stat-badge text-dark shadow-sm">
+                            📚 કુલ રજીસ્ટર: <span id="lblTotal" class="text-primary">0</span>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="bg-success bg-opacity-10 border border-success stat-badge text-success shadow-sm">
+                            ✅ કુલ હાજર: <span id="lblPresent">0</span>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="bg-danger bg-opacity-10 border border-danger stat-badge text-danger shadow-sm">
+                            ❌ કુલ ગેરહાજર: <span id="lblAbsent">0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <h5 class="mt-4 text-success fw-bold">👥 વિદ્યાર્થીઓની હાજરી અને વાલી સંપર્ક યાદી:</h5>
+                <div class="table-responsive shadow-sm rounded-4">
+                    <table class="table table-hover table-bordered align-middle text-center mb-0 bg-white">
+                        <thead class="table-dark">
+                            <tr>
+                                <th style="width: 8%;">ક્રમ</th>
+                                <th style="width: 35%;">વિદ્યાર્થીનું નામ & મોબાઈલ</th>
+                                <th style="width: 42%;">હાજરી નોંધવા માટેના બટન</th>
+                                <th style="width: 15%;">WhatsApp એલર્ટ</th>
+                            </tr>
+                        </thead>
+                        <tbody id="attendanceTableBody"></tbody>
+                    </table>
+                </div>
+                <button id="submitAttendanceBtn" class="btn btn-success w-100 mt-4 py-3 fs-5 fw-bold shadow" onclick="saveBulkAttendance()">✅ હાજરી સફળતાપૂર્વક સબમિટ કરો</button>
+            </div>
+        </div>
+
+        <!-- Admin Login Section with Master OTP Reset Option -->
+        <div id="loginSection" class="row justify-content-center" style="display: none;">
+            <div class="col-md-6">
+                <div class="card p-5 shadow-sm">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h4 class="text-dark fw-bold mb-0">🔐 શિક્ષક ઇમેલ લોગિન</h4>
+                        <button class="btn btn-outline-secondary btn-sm px-3" onclick="showSection('attendanceSection')">🏠 હોમ</button>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold text-secondary">ઇમેલ આઈડી:</label>
+                        <input type="email" id="adminEmailInput" class="form-control" placeholder="teacher@khandeval.com">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold text-secondary">પાસવર્ડ:</label>
+                        <input type="password" id="adminPasswordInput" class="form-control" placeholder="પાસવર્ડ">
+                    </div>
+                    
+                    <!-- Forgot Password with Master OTP Option -->
+                    <div class="text-end mb-4">
+                        <a href="javascript:void(0);" onclick="openForgotPasswordModal()" class="text-decoration-none small fw-bold text-primary">🔑 પાસવર્ડ ભૂલી ગયા છો? (માસ્ટર OTP વેરિફિકેશન)</a>
+                    </div>
+
+                    <button class="btn btn-dark w-100 mb-3 py-2 fw-bold shadow" onclick="adminLogin()">🚀 લોગિન કરો</button>
+                    <button class="btn btn-outline-secondary w-100 py-2" onclick="showSection('attendanceSection')">પાછા જાઓ (Home)</button>
+                    <div class="text-muted small mt-3 text-center" id="defaultLoginHint">ફાયરબેઝ સાથે કનેક્ટ થઈ રહ્યું છે...</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- FORGOT PASSWORD MODAL (Master OTP & New Password) -->
+        <div id="forgotPasswordModal" class="modal fade" tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content rounded-4 p-3 shadow">
+                    <div class="modal-header border-0">
+                        <h5 class="modal-title fw-bold text-primary">🔑 માસ્ટર એડમિન ઓટીપી દ્વારા પાસવર્ડ રીસેટ</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p class="small text-muted">પાસવર્ડ રીસેટ કરવા માટે માસ્ટર એડમિન (રાકેશભાઈ - 8140844248) ના WhatsApp પર OTP વેરિફિકેશન કોડ મોકલો.</p>
+                        
+                        <div id="step1Forgot">
+                            <button class="btn btn-success w-100 py-2 fw-bold mb-3 shadow-sm" onclick="sendMasterOTPWhatsApp()">📤 WhatsApp પર OTP કોડ મંગાવો</button>
+                            <hr>
+                            <div class="mb-3">
+                                <label class="form-label fw-bold small">તમને મળેલો 6 અંકનો OTP કોડ દાખલ કરો:</label>
+                                <input type="text" id="enteredOTP" class="form-control" placeholder="દા.ત. 4842">
+                            </div>
+                            <button class="btn btn-primary w-100 py-2 fw-bold shadow-sm" onclick="verifyOTPAndAllowReset()">✅ OTP ચકાસો</button>
+                        </div>
+
+                        <div id="step2Forgot" style="display: none;">
+                            <div class="alert alert-success small fw-bold">✅ OTP સફળતાપૂર્વક વેરિફાઈ થઈ ગયો છે! હવે નવો પાસવર્ડ દાખલ કરો.</div>
+                            <div class="mb-3">
+                                <label class="form-label fw-bold small">નવો પાસવર્ડ:</label>
+                                <input type="password" id="resetNewPass" class="form-control" placeholder="નવો પાસવર્ડ દાખલ કરો">
+                            </div>
+                            <button class="btn btn-dark w-100 py-2 fw-bold shadow-sm" onclick="saveNewResetPassword()">💾 પાસવર્ડ કાયમ માટે બદલો</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CLEAR DATABASE OTP MODAL -->
+        <div id="clearDataOTPModal" class="modal fade" tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content rounded-4 p-3 shadow">
+                    <div class="modal-header border-0">
+                        <h5 class="modal-title fw-bold text-danger">⚠️ ડેટા ક્લિયર કરવા OTP વેરિફિકેશન</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p class="small text-muted">ફાયરબેઝનો તમામ ડેટા (વિદ્યાર્થીઓ, હાજરી, રજાઓ) કાયમ માટે ડિલીટ કરવા માટે રાકેશભાઈ (8140844248) ના WhatsApp પર OTP મોકલો.</p>
+                        
+                        <div id="step1ClearData">
+                            <button class="btn btn-success w-100 py-2 fw-bold mb-3 shadow-sm" onclick="sendClearDataOTPWhatsApp()">📤 WhatsApp પર OTP કોડ મંગાવો</button>
+                            <hr>
+                            <div class="mb-3">
+                                <label class="form-label fw-bold small">તમને મળેલો 6 અંકનો OTP કોડ દાખલ કરો:</label>
+                                <input type="text" id="enteredClearOTP" class="form-control" placeholder="દા.ત. 4842">
+                            </div>
+                            <button class="btn btn-danger w-100 py-2 fw-bold shadow-sm" onclick="verifyOTPAndClearDatabase()">✅ OTP ચકાસી ડેટા ડિલીટ કરો</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- GRADE PROMOTION OTP MODAL -->
+        <div id="promotionOTPModal" class="modal fade" tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content rounded-4 p-3 shadow">
+                    <div class="modal-header border-0">
+                        <h5 class="modal-title fw-bold text-primary">🔐 ધોરણ અપડેટ કરવા માટે OTP વેરિફિકેશન</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p class="small text-muted">બધા વિદ્યાર્થીઓના ધોરણ ઓટો-અપડેટ કરવા માટે માસ્ટર એડમિન (8140844248) ના WhatsApp પર OTP મોકલો.</p>
+                        
+                        <div id="step1PromoOTP">
+                            <button class="btn btn-success w-100 py-2 fw-bold mb-3 shadow-sm" onclick="sendPromotionOTPWhatsApp()">📤 WhatsApp પર OTP કોડ મંગાવો</button>
+                            <hr>
+                            <div class="mb-3">
+                                <label class="form-label fw-bold small">તમને મળેલો 6 અંકનો OTP કોડ દાખલ કરો:</label>
+                                <input type="text" id="enteredPromoOTP" class="form-control" placeholder="દા.ત. 4842">
+                            </div>
+                            <button class="btn btn-primary w-100 py-2 fw-bold shadow-sm" onclick="verifyOTPAndExecutePromotion()">✅ OTP ચકાસી ધોરણ અપડેટ કરો</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3. Admin Dashboard Section -->
+        <div id="adminDashboard" style="display: none;">
+            <div class="card p-4 mb-4 shadow-sm">
+                <div class="d-flex justify-content-between align-items-center mb-4 border-bottom pb-3">
+                    <h4 class="text-primary fw-bold mb-0">⚙️ એડમિન ડેશબોર્ડ (વર્ગ શિક્ષક પેનલ)</h4>
+                    <div>
+                        <button class="btn btn-secondary btn-sm me-1 px-3" onclick="showSection('attendanceSection')">🏠 હોમ</button>
+                        <button class="btn btn-danger btn-sm px-3" onclick="logoutAdmin()">🚪 લોગઆઉટ</button>
+                    </div>
+                </div>
+
+                <!-- SwiftChat Shortcut Button -->
+                <div class="mb-4 bg-info bg-opacity-10 border border-info p-4 rounded-4 shadow-sm text-center">
+                    <h5 class="text-info fw-bold mb-2">📱 SwiftChat (સ્વિફ્ટચેટ) શોર્ટકટ</h5>
+                    <p class="small text-muted mb-3">એપમાંથી સીધા જ SwiftChat પર જવા માટે નીચેના બટન પર ક્લિક કરો.</p>
+                    <a href="https://play.google.com/store/apps/details?id=ai.convegenius.app" target="_blank" class="btn btn-info fw-bold text-white px-4 shadow-sm">
+                        🚀 SwiftChat ઓપન કરો
+                    </a>
+                </div>
+                
+                <!-- Quick Sync Button for Missing Students -->
+                <div class="mb-4 bg-warning bg-opacity-10 border border-warning p-4 rounded-4 shadow-sm text-center">
+                    <h5 class="text-dark fw-bold mb-2">⚡ બાલવાટીકા થી ૮ ના બાળકો નથી દેખાતા?</h5>
+                    <p class="small text-muted mb-3">જો ડેટાબેઝમાં બાળકો ખૂટતા હોય તો નીચેના બટન પર ક્લિક કરીને તમામ વિદ્યાર્થીઓ તાત્કાલિક ફાયરબેઝમાં ઉમેરી શકો છો.</p>
+                    <button class="btn btn-warning fw-bold text-dark px-4 shadow-sm" onclick="forceAddDefaultStudents()">🔄 તમામ ડિફોલ્ટ વિદ્યાર્થીઓ ફાયરબેઝમાં ઉમેરો</button>
+                </div>
+
+                <!-- Auto-Promotion Button with WhatsApp OTP -->
+                <div class="mb-4 bg-primary bg-opacity-10 border border-primary p-4 rounded-4 shadow-sm text-center">
+                    <h5 class="text-primary fw-bold mb-2">🎓 નવા વર્ષ માટે ધોરણ ઓટો-અપડેટ (WhatsApp OTP સુરક્ષિત)</h5>
+                    <p class="small text-muted mb-3">નવા શૈક્ષણિક સત્રમાં તમામ બાળકોના ધોરણ એક સ્ટેપ ઉપર વધારવા (ધો.3 $\rightarrow$ ધો.4) અને ધોરણ ૮ ના બાળકોને હટાવવા માટે.</p>
+                    <button class="btn btn-primary fw-bold text-white px-4 shadow-sm" onclick="openPromotionOTPModal()">🚀 ધોરણ ઓટો-અપડેટ કરવા OTP મંગાવો</button>
+                </div>
+
+                <!-- Clear Database with WhatsApp OTP Button -->
+                <div class="mb-4 bg-danger bg-opacity-10 border border-danger p-4 rounded-4 shadow-sm text-center">
+                    <h5 class="text-danger fw-bold mb-2">⚠️ ડેટાબેઝ ક્લીયર કરો (WhatsApp OTP સુરક્ષા)</h5>
+                    <p class="small text-muted mb-3">બધો ડેટા ડિલીટ કરવા માટે માસ્ટર એડમિન (8140844248) ના WhatsApp પર OTP મોકલી વેરિફાઈ કરવું પડશે.</p>
+                    <button class="btn btn-danger fw-bold text-white px-4 shadow-sm" onclick="openClearDataOTPModal()">🗑️ ફાયરબેઝ ડેટા ક્લિયર કરવા OTP મંગાવો</button>
+                </div>
+
+                <!-- Admin Credentials Change Section -->
+                <div class="mb-4 bg-light p-4 border rounded-4 shadow-sm">
+                    <h5 class="text-secondary fw-bold mb-3">🔑 એડમિન ઇમેલ અને પાસવર્ડ બદલો</h5>
+                    <div class="row g-3">
+                        <div class="col-md-3">
+                            <input type="password" id="currAdminPass" class="form-control" placeholder="ચાલુ પાસવર્ડ">
+                        </div>
+                        <div class="col-md-3">
+                            <input type="email" id="newAdminEmail" class="form-control" placeholder="નવો ઇમેલ">
+                        </div>
+                        <div class="col-md-3">
+                            <input type="password" id="newAdminPass" class="form-control" placeholder="નવો પાસવર્ડ">
+                        </div>
+                        <div class="col-md-3">
+                            <input type="password" id="confirmAdminPass" class="form-control" placeholder="કન્ફર્મ પાસવર્ડ">
+                        </div>
+                    </div>
+                    <button class="btn btn-warning mt-3 px-4 fw-bold text-dark shadow-sm" onclick="updateAdminCredentials()">💾 પાસવર્ડ/ઇમેલ કાયમ માટે અપડેટ કરો</button>
+                </div>
+
+                <!-- Daily Attendance Summary Section -->
+                <div class="mb-4 bg-white p-4 border rounded-4 shadow-sm">
+                    <h5 class="text-primary fw-bold mb-3">📅 દૈનિક હાજરી સારાંશ અને રીસેટ/ડિલીટ વ્યવસ્થા</h5>
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-4">
+                            <label class="form-label fw-bold">તારીખ પસંદ કરો:</label>
+                            <input type="date" id="dailySummaryDate" class="form-control" onchange="loadDailySummary()">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label fw-bold">ધોરણ:</label>
+                            <select id="dailySummaryStd" class="form-select" onchange="loadDailySummary()">
+                                <option value="બાલવાટીકા">બાલવાટીકા</option>
+                                <option value="ધોરણ 1">ધોરણ 1</option>
+                                <option value="ધોરણ 2">ધોરણ 2</option>
+                                <option value="ધોરણ 3">ધોરણ 3</option>
+                                <option value="ધોરણ 4">ધોરણ 4</option>
+                                <option value="ધોરણ 5">ધોરણ 5</option>
+                                <option value="ધોરણ 6" selected>ધોરણ 6</option>
+                                <option value="ધોરણ 7">ધોરણ 7</option>
+                                <option value="ધોરણ 8">ધોરણ 8</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label fw-bold">વર્ગ:</label>
+                            <select id="dailySummarySec" class="form-select" onchange="loadDailySummary()">
+                                <option value="A">વર્ગ A</option>
+                                <option value="B">વર્ગ B</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div id="dailySummaryResult" style="display: none;">
+                        <div class="row g-3 text-center mb-3">
+                            <div class="col-md-3">
+                                <div class="bg-light border p-3 rounded-4 fw-bold shadow-sm">કુલ રજીસ્ટર: <span id="dsTotal" class="text-primary">0</span></div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="bg-success bg-opacity-10 border border-success p-3 rounded-4 fw-bold text-success shadow-sm">હાજર: <span id="dsPresent">0</span></div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="bg-danger bg-opacity-10 border border-danger p-3 rounded-4 fw-bold text-danger shadow-sm">ગેરહાજર: <span id="dsAbsent">0</span></div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="bg-warning bg-opacity-10 border border-warning p-3 rounded-4 fw-bold text-dark shadow-sm">ટકાવારી: <span id="dsPercentage">0%</span></div>
+                            </div>
+                        </div>
+
+                        <!-- Reset / Delete Date Attendance Button -->
+                        <div class="alert alert-info d-flex justify-content-between align-items-center mb-3">
+                            <span>💡 જો આ તારીખની હાજરીમાં ભૂલ હોય અને ફરીથી પૂરવી હોય, તો અહીંથી આખી તારીખનો ડેટા ડિલીટ/રીસેટ કરી શકો છો:</span>
+                            <button class="btn btn-danger btn-sm fw-bold px-3 shadow-sm" onclick="resetDateAttendance()">🗑️ આ તારીખની હાજરી રીસેટ/ડિલીટ કરો</button>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <div class="card border-success shadow-sm p-3 rounded-4">
+                                    <h6 class="text-success fw-bold">✅ હાજર વિદ્યાર્થીઓનાં નામ:</h6>
+                                    <ul id="presentStudentsList" class="mb-0 ps-3 text-success"></ul>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="card border-danger shadow-sm p-3 rounded-4">
+                                    <h6 class="text-danger fw-bold">❌ ગેરહાજર વિદ્યાર્થીઓનાં નામ:</h6>
+                                    <ul id="absentStudentsList" class="mb-0 ps-3 text-danger"></ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Add Student Form -->
+                <div class="row g-3 mb-4 bg-white p-4 border rounded-4 shadow-sm">
+                    <h5 class="fw-bold text-dark mb-3">➕ નવા વિદ્યાર્થીનું નામ અને મોબાઈલ નંબર ઉમેરો</h5>
+                    <div class="col-md-3">
+                        <input type="text" id="newStudentName" class="form-control" placeholder="વિદ્યાર્થીનું નામ">
+                    </div>
+                    <div class="col-md-3">
+                        <input type="text" id="newStudentPhone" class="form-control" placeholder="વાલીનો મોબાઈલ નંબર">
+                    </div>
+                    <div class="col-md-2">
+                        <select id="newStudentStd" class="form-select">
+                            <option value="બાલવાટીકા">બાલવાટીકા</option>
+                            <option value="ધોરણ 1">ધોરણ 1</option>
+                            <option value="ધોરણ 2">ધોરણ 2</option>
+                            <option value="ધોરણ 3">ધોરણ 3</option>
+                            <option value="ધોરણ 4">ધોરણ 4</option>
+                            <option value="ધોરણ 5">ધોરણ 5</option>
+                            <option value="ધોરણ 6" selected>ધોરણ 6</option>
+                            <option value="ધોરણ 7">ધોરણ 7</option>
+                            <option value="ધોરણ 8">ધોરણ 8</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <select id="newStudentSec" class="form-select">
+                            <option value="A">વર્ગ A</option>
+                            <option value="B">વર્ગ B</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <button class="btn btn-primary w-100 fw-bold shadow-sm" onclick="addStudent()">ઉમેરો</button>
+                    </div>
+                </div>
+
+                <!-- JSON Bulk Import Section -->
+                <div class="mb-4 bg-light p-4 border rounded-4 shadow-sm">
+                    <h5 class="fw-bold text-dark mb-2">📥 બલ્ક વિદ્યાર્થીઓ ઉમેરો (JSON Format with Phone)</h5>
+                    <p class="small text-muted mb-2">ઉદાહરણ: `[{"name": "રાજેશ ભાઈ", "std": "ધોરણ 6", "sec": "A", "phone": "9876543210"}]`</p>
+                    <textarea id="jsonStudentInput" class="form-control mb-3" rows="3" placeholder="અહીં JSON ડેટા પેસ્ટ કરો..."></textarea>
+                    <button class="btn btn-secondary btn-sm px-4 fw-bold shadow-sm" onclick="importJSONStudents()">🔄 બલ્ક ડેટા ઇમ્પોર્ટ કરો</button>
+                </div>
+
+                <!-- Holiday Management Section -->
+                <div class="mb-4 bg-white p-4 border rounded-4 shadow-sm">
+                    <h5 class="text-danger fw-bold mb-3">🏖️ શાળાની રજાઓ મેનેજ કરો (Holiday Setup)</h5>
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-4">
+                            <input type="date" id="holidayDate" class="form-control">
+                        </div>
+                        <div class="col-md-6">
+                            <input type="text" id="holidayReason" class="form-control" placeholder="રજાનું કારણ (દા.ત. તહેવાર/ઉત્સવ)">
+                        </div>
+                        <div class="col-md-2">
+                            <button class="btn btn-danger w-100 fw-bold shadow-sm" onclick="addHoliday()">રજા ઉમેરો</button>
+                        </div>
+                    </div>
+                    <div class="mb-2">
+                        <input type="text" id="holidaySearchInput" class="form-control form-control-sm" placeholder="🔍 રજાઓ શોધો (તારીખ અથવા કારણ દ્વારા)..." onkeyup="loadHolidayList()">
+                    </div>
+                    <div id="holidayListContainer" class="small mt-2"></div>
+                </div>
+
+                <!-- Student List with Quick Search & Edit -->
+                <div class="d-flex justify-content-between align-items-center mb-3 mt-4">
+                    <h5 class="fw-bold text-dark mb-0">📜 વિદ્યાર્થીઓની યાદી અને મોબાઈલ નંબર મેનેજમેન્ટ:</h5>
+                    <div class="row g-2">
+                        <div class="col-auto">
+                            <input type="text" id="adminSearchStudent" class="form-control form-control-sm" placeholder="🔍 નામથી શોધો..." onkeyup="loadAdminStudentList()">
+                        </div>
+                        <div class="col-auto">
+                            <select id="filterStudentStd" class="form-select form-select-sm" onchange="loadAdminStudentList()">
+                                <option value="">તમામ ધોરણ</option>
+                                <option value="બાલવાટીકા">બાલવાટીકા</option>
+                                <option value="ધોરણ 1">ધોરણ 1</option>
+                                <option value="ધોરણ 2">ધોરણ 2</option>
+                                <option value="ધોરણ 3">ધોરણ 3</option>
+                                <option value="ધોરણ 4">ધોરણ 4</option>
+                                <option value="ધોરણ 5">ધોરણ 5</option>
+                                <option value="ધોરણ 6">ધોરણ 6</option>
+                                <option value="ધોરણ 7">ધોરણ 7</option>
+                                <option value="ધોરણ 8">ધોરણ 8</option>
+                            </select>
+                        </div>
+                        <div class="col-auto">
+                            <select id="filterStudentSec" class="form-select form-select-sm" onchange="loadAdminStudentList()">
+                                <option value="">તમામ વર્ગ</option>
+                                <option value="A">વર્ગ A</option>
+                                <option value="B">વર્ગ B</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="table-responsive mb-4 shadow-sm rounded-4">
+                    <table class="table table-bordered table-hover align-middle mb-0 bg-white">
+                        <thead class="table-secondary">
+                            <tr>
+                                <th>નામ</th>
+                                <th>ધોરણ</th>
+                                <th>વર્ગ</th>
+                                <th>મોબાઈલ નંબર (એડિટ કરો)</th>
+                                <th style="width: 15%;">ક્રિયા</th>
+                            </tr>
+                        </thead>
+                        <tbody id="adminStudentListTable"></tbody>
+                    </table>
+                </div>
+
+                <!-- Reports & Statistics with Filter -->
+                <div class="d-flex justify-content-between align-items-center mt-4 mb-3">
+                    <h4 class="text-success fw-bold mb-0">📊 હાજરી રિપોર્ટ અને WhatsApp સૂચનાઓ</h4>
+                    <div>
+                        <button class="btn btn-success btn-sm px-3 fw-bold shadow-sm me-2" onclick="downloadExcelCSV()">📥 Excel / CSV ડાઉનલોડ કરો</button>
+                        <button class="btn btn-outline-success btn-sm px-3 fw-bold shadow-sm" onclick="sendBulkMonthlyWhatsApp()">📤 બધા વાલીઓને WhatsApp રિપોર્ટ મોકલો</button>
+                    </div>
+                </div>
+                <p class="small text-muted">*(રવિવાર અને એડમિન દ્વારા સેટ કરેલ રજાઓ ઓટોમેટિક બાદ થઈને માત્ર વર્કિંગ ડે ના આધારે જ ટકાવારી ગણાય છે.)*</p>
+
+                <div class="row g-3 mb-3 bg-light p-4 rounded-4 shadow-sm">
+                    <div class="col-md-3">
+                        <label class="form-label fw-bold">મહિનો પસંદ કરો:</label>
+                        <select id="reportMonth" class="form-select" onchange="generateReport()">
+                            <option value="જાન્યુઆરી">જાન્યુઆરી</option>
+                            <option value="ફેબ્રુઆરી">ફેબ્રુઆરી</option>
+                            <option value="માર્ચ">માર્ચ</option>
+                            <option value="એપ્રિલ">એપ્રિલ</option>
+                            <option value="મે">મે</option>
+                            <option value="જૂન">જૂન</option>
+                            <option value="જુલાઈ">જુલાઈ</option>
+                            <option value="ઓગસ્ટ" selected>ઓગસ્ટ</option>
+                            <option value="સપ્ટેમ્બર">સપ્ટેમ્બર</option>
+                            <option value="ઓક્ટોબર">ઓક્ટોબર</option>
+                            <option value="નવેમ્બર">નવેમ્બર</option>
+                            <option value="ડિસેમ્બર">ડિસેમ્બર</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label fw-bold">વર્ષ:</label>
+                        <input type="text" id="reportYear" class="form-control" value="2026" onchange="generateReport()">
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label fw-bold">ધોરણ:</label>
+                        <select id="reportStd" class="form-select" onchange="generateReport()">
+                            <option value="બાલવાટીકા">બાલવાટીકા</option>
+                            <option value="ધોરણ 1">ધોરણ 1</option>
+                            <option value="ધોરણ 2">ધોરણ 2</option>
+                            <option value="ધોરણ 3">ધોરણ 3</option>
+                            <option value="ધોરણ 4">ધોરણ 4</option>
+                            <option value="ધોરણ 5">ધોરણ 5</option>
+                            <option value="ધોરણ 6" selected>ધોરણ 6</option>
+                            <option value="ધોરણ 7">ધોરણ 7</option>
+                            <option value="ધોરણ 8">ધોરણ 8</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label fw-bold">વર્ગ:</label>
+                        <select id="reportSec" class="form-select" onchange="generateReport()">
+                            <option value="A">વર્ગ A</option>
+                            <option value="B">વર્ગ B</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <input type="text" id="reportSearchInput" class="form-control form-control-sm" placeholder="🔍 રિપોર્ટમાંથી વિદ્યાર્થીનું નામ શોધો..." onkeyup="generateReport()">
+                </div>
+
+                <div class="table-responsive shadow-sm rounded-4 mb-4">
+                    <table class="table table-bordered table-striped align-middle mb-0 bg-white" id="reportTableElement">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>વિદ્યાર્થીનું નામ</th>
+                                <th>મોબાઈલ નંબર</th>
+                                <th>કુલ હાજર દિવસો</th>
+                                <th>કુલ વર્કિંગ ડે</th>
+                                <th>હાજરીના ટકા (%)</th>
+                                <th>WhatsApp મોકલો</th>
+                            </tr>
+                        </thead>
+                        <tbody id="attendanceReportTable"></tbody>
+                    </table>
+                </div>
+
+                <!-- 100% Attendance Certificates Section -->
+                <h4 class="text-warning mt-4 fw-bold text-dark mb-3">🏆 ૧૦૦% હાજરી ધરાવતા બાળકો માટે સન્માન પત્ર (સર્ટિફિકેટ્સ)</h4>
+                <div id="topStudentsContainer" class="row g-3 mb-4"></div>
+            </div>
+        </div>
+
+        <!-- Developer Footer -->
+        <footer>
+            <p class="mb-1">Designed & Developed by: <strong class="text-warning">RAKESHKUMAR PRAJAPATI</strong> | Mobile: <strong class="text-warning">8140844248</strong></p>
+            <p class="mb-0 small text-light">ખંડેવાળ પ્રાથમિક શાળા © 2026</p>
+        </footer>
+
+    </div>
+
+    <!-- Bootstrap 5 JS Bundle CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Firebase SDK Scripts -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+
+    <!-- JavaScript Firebase Real-Time Online Logic -->
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyCZqPRbXUCGxefYyTWFoqSsBiuzGkJUxIE",
+            authDomain: "khandeval-attendance.firebaseapp.com",
+            databaseURL: "https://khandeval-attendance-default-rtdb.firebaseio.com",
+            projectId: "khandeval-attendance",
+            storageBucket: "khandeval-attendance.appspot.com",
+            messagingSenderId: "519767798240",
+            appId: "1:519767798240:web:d91587ed7fc3ade5b2bb85",
+            measurementId: "G-W736QRYZXX"
+        };
+
+        let db;
+        try {
+            if (!firebase.apps.length) {
+                firebase.initializeApp(firebaseConfig);
+            }
+            db = firebase.firestore();
+        } catch (e) {
+            console.error(e);
+        }
+
+        let unsavedAttendanceCache = {};
+        let currentDivision = '';
+        let generatedMasterOTP = '';
+        let generatedClearOTP = '';
+        let generatedPromoOTP = '';
+
+        // Instant local students array to avoid any network delay
+        let students = [
+            { "order": 1, "name": "ANJALIBEN P RATHOD", "std": "બાલવાટીકા", "sec": "A", "phone": "9537642058" },
+            { "order": 2, "name": "ARATIBEN D RATHOD", "std": "બાલવાટીકા", "sec": "A", "phone": "9537642058" },
+            { "order": 3, "name": "ASMITA S RATHOD", "std": "બાલવાટીકા", "sec": "A", "phone": "9638150187" },
+            { "order": 4, "name": "BHAVINKUMAR R RATHOD", "std": "બાલવાટીકા", "sec": "A", "phone": "9016458938" },
+            { "order": 5, "name": "CHHAYABEN J RATHOD", "std": "બાલવાટીકા", "sec": "A", "phone": "9909664093" },
+            { "order": 6, "name": "CHHAYABEN S RATHOD", "std": "બાલવાટીકા", "sec": "A", "phone": "9099673106" },
+            { "order": 7, "name": "DAKSHKUMAR B RATHOD", "std": "બાલવાટીકા", "sec": "A", "phone": "9328115295" },
+            { "order": 8, "name": "DAKSHKUMAR S RAVAL", "std": "બાલવાટીકા", "sec": "A", "phone": "9328115295" },
+            { "order": 9, "name": "DEVANSHIBEN J RATHOD", "std": "બાલવાટીકા", "sec": "A", "phone": "8141971139" },
+            { "order": 10, "name": "DHRUVIBEN M JADAV", "std": "બાલવાટીકા", "sec": "A", "phone": "6353552631" },
+            { "order": 11, "name": "DIMPALBEN M RATHOD", "std": "બાલવાટીકા", "sec": "A", "phone": "9714302929" },
+            { "order": 12, "name": "DIVYABEN A RATHOD", "std": "બાલવાટીકા", "sec": "A", "phone": "9265195015" },
+            { "order": 13, "name": "HARDIKKUMAR M RATHOD", "std": "બાલવાટીકા", "sec": "A", "phone": "9904457863" },
+            { "order": 14, "name": "HETAKSHIBEN P RATHOD", "std": "બાલવાટીકા", "sec": "A", "phone": "6353552631" },
+            { "order": 15, "name": "JAIMITKUMAR R RATHOD", "std": "બાલવાટીકા", "sec": "A", "phone": "6353221618" },
+            { "order": 16, "name": "JANVIBEN D RATHOD", "std": "બાલવાટીકા", "sec": "A", "phone": "6352406485" },
+            { "order": 17, "name": "JAYKUMAR R RATHOD", "std": "બાલવાટીકા", "sec": "A", "phone": "9106201521" },
+            { "order": 18, "name": "JAYRAJSINH G RATHOD", "std": "બાલવાટીકા", "sec": "A", "phone": "9739880756" },
+            { "order": 19, "name": "JINALBEN A RATHOD", "std": "બાલવાટીકા", "sec": "A", "phone": "8160915740" },
+            { "order": 20, "name": "KAUSHIKKUMAR M GOHIL", "std": "બાલવાટીકા", "sec": "A", "phone": "9512893747" },
+            { "order": 21, "name": "KIYANKUMAR M RATHOD", "std": "બાલવાટીકા", "sec": "A", "phone": "9714302929" },
+            { "order": 22, "name": "LAXKUMAR F RATHOD", "std": "બાલવાટીકા", "sec": "A", "phone": "9106201521" },
+            { "order": 23, "name": "MAHIBEN A RATHOD", "std": "બાલવાટીકા", "sec": "A", "phone": "9343685393" },
+            { "order": 24, "name": "NEHABEN V BARIYA", "std": "બાલવાટીકા", "sec": "A", "phone": "" },
+            { "order": 25, "name": "NIKULKUMAR K RATHOD", "std": "બાલવાટીકા", "sec": "A", "phone": "8849887784" },
+            { "order": 26, "name": "NIMISHABEN A RATHOD", "std": "બાલવાટીકા", "sec": "A", "phone": "9586706443" },
+            { "order": 27, "name": "RASHMITABEN S RATHOD", "std": "બાલવાટીકા", "sec": "A", "phone": "7990938721" },
+            { "order": 28, "name": "RIDDHIBEN H JADAV", "std": "બાલવાટીકા", "sec": "A", "phone": "9099673106" },
+            { "order": 29, "name": "SHIVAMSINH A RATHOD", "std": "બાલવાટીકા", "sec": "A", "phone": "6351583361" },
+            { "order": 30, "name": "SHIVANIBEN G RATHOD", "std": "બાલવાટીકા", "sec": "A", "phone": "7984591926" },
+            { "order": 31, "name": "SMITKUMAR J RATHOD", "std": "બાલવાટીકા", "sec": "A", "phone": "9739880756" },
+            { "order": 32, "name": "VAISHNAVIBEN A RATHOD", "std": "બાલવાટીકા", "sec": "A", "phone": "7990938721" },
+            { "order": 33, "name": "VIVEKKUMAR K RATHOD", "std": "બાલવાટીકા", "sec": "A", "phone": "" },
+            { "order": 34, "name": "YUVRAJSINH A RATHOD", "std": "બાલવાટીકા", "sec": "A", "phone": "9726499317" },
+            { "order": 35, "name": "AKSHAYKUMAR M RATHOD", "std": "ધોરણ 1", "sec": "A", "phone": "7567594510" },
+            { "order": 65, "name": "ANKITABEN V PARMAR", "std": "ધોરણ 2", "sec": "A", "phone": "8153017526" },
+            { "order": 96, "name": "ARUNKUMAR N RAVAL", "std": "ધોરણ 3", "sec": "A", "phone": "8160481911" },
+            { "order": 131, "name": "ANITABEN M GOHIL", "std": "ધોરણ 5", "sec": "A", "phone": "" },
+            { "order": 171, "name": "AARUSKUMAR M RATHOD", "std": "ધોરણ 6", "sec": "A", "phone": "9023904667" },
+            { "order": 200, "name": "AARTIBEN S RATHOD", "std": "ધોરણ 7", "sec": "A", "phone": "9727178563" },
+            { "order": 236, "name": "AJAYKUMAR R RATHOD", "std": "ધોરણ 8", "sec": "A", "phone": "8238623229" }
+        ];
+
+        let holidays = [];
+        let adminEmail = 'teacher@khandeval.com';
+        let adminPass = 'admin123';
+
+        window.addEventListener('DOMContentLoaded', () => {
+            try {
+                const dateInput = document.getElementById('attendanceDate');
+                if(dateInput) dateInput.value = getLocalDateString(new Date());
+                const dsDateInput = document.getElementById('dailySummaryDate');
+                if(dsDateInput) dsDateInput.value = getLocalDateString(new Date());
+                setupRealtimeSync();
+            } catch (e) {
+                console.error(e);
+            }
+        });
+
+        function setupRealtimeSync() {
+            try {
+                db.collection("students").onSnapshot((querySnapshot) => {
+                    if(!querySnapshot.empty) {
+                        let uniqueMap = new Map();
+                        querySnapshot.forEach((doc) => {
+                            let data = doc.data();
+                            let key = `${(data.std||'').trim()}_${(data.sec||'A').trim()}_${(data.name||'').trim()}`;
+                            if (!uniqueMap.has(key)) {
+                                uniqueMap.set(key, { id: doc.id, ...data });
+                            }
+                        });
+                        students = Array.from(uniqueMap.values());
+                        students.sort((a, b) => (a.order || 999) - (b.order || 999));
+                    }
+                    loadAdminStudentList();
+                    loadClassStudentsForAttendance();
+                    loadDailySummary();
+                    generateReport();
+                }, (error) => {
+                    console.warn(error);
+                });
+
+                db.collection("holidays").onSnapshot((querySnapshot) => {
+                    holidays = [];
+                    querySnapshot.forEach((doc) => {
+                        holidays.push(doc.data());
+                    });
+                    loadHolidayList();
+                    generateReport();
+                }, (error) => {});
+
+                db.collection("admin").doc("credentials").onSnapshot((doc) => {
+                    if(doc.exists) {
+                        adminEmail = doc.data().email;
+                        adminPass = doc.data().pass;
+                    }
+                    const loginHint = document.getElementById('defaultLoginHint');
+                    if(loginHint) {
+                        loginHint.innerText = `ડિફોલ્ટ ઇમેલ: ${adminEmail} | પાસવર્ડ: ${adminPass}`;
+                    }
+                }, (error) => {});
+            } catch (e) {}
+        }
+
+        function getLocalDateString(d) {
+            const year = d.getFullYear();
+            const month = String(d.getMonth() + 1).padStart(2, '0');
+            const day = String(d.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        }
+
+        function formatDateToDDMMYYYY(dateStr) {
+            if (!dateStr) return '';
+            const parts = dateStr.split('-');
+            if (parts.length === 3) {
+                return `${parts[2]}/${parts[1]}/${parts[0]}`;
+            }
+            return dateStr;
+        }
+
+        function openForgotPasswordModal() {
+            let myModal = new bootstrap.Modal(document.getElementById('forgotPasswordModal'));
+            myModal.show();
+            document.getElementById('step1Forgot').style.display = 'block';
+            document.getElementById('step2Forgot').style.display = 'none';
+            document.getElementById('enteredOTP').value = '';
+        }
+
+        function sendMasterOTPWhatsApp() {
+            generatedMasterOTP = Math.floor(1000 + Math.random() * 9000).toString();
+            let masterPhone = "918140844248";
+            let msg = `🔐 ખંડેવાળ શાળા એપ એડમિન પાસવર્ડ રીસેટ ઓટીપી: *${generatedMasterOTP}* - કૃપા કરીને આ કોડ એપમાં દાખલ કરો.`;
+            window.open(`https://wa.me/${masterPhone}?text=${encodeURIComponent(msg)}`, '_blank');
+        }
+
+        function verifyOTPAndAllowReset() {
+            let userOtp = document.getElementById('enteredOTP').value.trim();
+            if(!generatedMasterOTP) {
+                alert('પહેલા WhatsApp પર OTP મંગાવો!');
+                return;
+            }
+            if(userOtp === generatedMasterOTP) {
+                document.getElementById('step1Forgot').style.display = 'none';
+                document.getElementById('step2Forgot').style.display = 'block';
+            } else {
+                alert('ખોટો OTP કોડ!');
+            }
+        }
+
+        function saveNewResetPassword() {
+            let newPass = document.getElementById('resetNewPass').value.trim();
+            if(!newPass) {
+                alert('નવો પાસવર્ડ ખાલી ન હોઈ શકે!');
+                return;
+            }
+            db.collection("admin").doc("credentials").update({ pass: newPass }).then(() => {
+                adminPass = newPass;
+                alert('પાસવર્ડ સફળતાપૂર્વક બદલાઈ ગયો છે!');
+                let modalEl = document.getElementById('forgotPasswordModal');
+                let modal = bootstrap.Modal.getInstance(modalEl);
+                modal.hide();
+            }).catch(err => alert('ભૂલ: ' + err.message));
+        }
+
+        function openClearDataOTPModal() {
+            let myModal = new bootstrap.Modal(document.getElementById('clearDataOTPModal'));
+            myModal.show();
+            document.getElementById('enteredClearOTP').value = '';
+            document.getElementById('step1ClearData').style.display = 'block';
+        }
+
+        function sendClearDataOTPWhatsApp() {
+            generatedClearOTP = Math.floor(1000 + Math.random() * 9000).toString();
+            let masterPhone = "918140844248";
+            let msg = `⚠️ ખંડેવાળ શાળા એપ: ડેટા ક્લિયર કરવા માટેનો OTP કોડ: *${generatedClearOTP}*`;
+            window.open(`https://wa.me/${masterPhone}?text=${encodeURIComponent(msg)}`, '_blank');
+        }
+
+        function verifyOTPAndClearDatabase() {
+            let userOtp = document.getElementById('enteredClearOTP').value.trim();
+            if(userOtp === generatedClearOTP) {
+                if (confirm('શું તમે ખરેખર બધો ડેટા ડિલીટ કરવા માંગો છો?')) {
+                    db.collection("students").get().then(snapshot => {
+                        let batch = db.batch();
+                        snapshot.forEach(doc => batch.delete(doc.ref));
+                        return batch.commit();
+                    }).then(() => {
+                        alert('ડેટા ડિલીટ થઈ ગયો છે!');
+                        location.reload();
+                    });
+                }
+            } else {
+                alert('ખોટો OTP કોડ!');
+            }
+        }
+
+        function openPromotionOTPModal() {
+            let myModal = new bootstrap.Modal(document.getElementById('promotionOTPModal'));
+            myModal.show();
+            document.getElementById('enteredPromoOTP').value = '';
+            document.getElementById('step1PromoOTP').style.display = 'block';
+        }
+
+        function sendPromotionOTPWhatsApp() {
+            generatedPromoOTP = Math.floor(1000 + Math.random() * 9000).toString();
+            let masterPhone = "918140844248";
+            let msg = `🎓 ખંડેવાળ શાળા એપ: ધોરણ ઓટો-અપડેટ કરવાનો OTP કોડ: *${generatedPromoOTP}*`;
+            window.open(`https://wa.me/${masterPhone}?text=${encodeURIComponent(msg)}`, '_blank');
+        }
+
+        async function verifyOTPAndExecutePromotion() {
+            let userOtp = document.getElementById('enteredPromoOTP').value.trim();
+            if(userOtp === generatedPromoOTP) {
+                if (confirm('શું તમે તમામ વિદ્યાર્થીઓના ધોરણ એક સ્ટેપ આગળ વધારવા માંગો છો?')) {
+                    try {
+                        let batch = db.batch();
+                        let snapshot = await db.collection("students").get();
+                        snapshot.forEach((docSnap) => {
+                            let student = docSnap.data();
+                            let currentStd = (student.std || "").trim();
+                            let studentRef = db.collection("students").doc(docSnap.id);
+                            if (currentStd === "ધોરણ 8") {
+                                batch.delete(studentRef);
+                            } else {
+                                let nextStd = "";
+                                if (currentStd === "બાલવાટીકા") nextStd = "ધોરણ 1";
+                                else if (currentStd === "ધોરણ 1") nextStd = "ધોરણ 2";
+                                else if (currentStd === "ધોરણ 2") nextStd = "ધોરણ 3";
+                                else if (currentStd === "ધોરણ 3") nextStd = "ધોરણ 4";
+                                else if (currentStd === "ધોરણ 4") nextStd = "ધોરણ 5";
+                                else if (currentStd === "ધોરણ 5") nextStd = "ધોરણ 6";
+                                else if (currentStd === "ધોરણ 6") nextStd = "ધોરણ 7";
+                                else if (currentStd === "ધોરણ 7") nextStd = "ધોરણ 8";
+                                if (nextStd !== "") {
+                                    batch.update(studentRef, { std: nextStd });
+                                }
+                            }
+                        });
+                        await batch.commit();
+                        alert('ધોરણ સફળતાપૂર્વક અપડેટ થઈ ગયા!');
+                        location.reload();
+                    } catch (error) {
+                        alert('ભૂલ: ' + error.message);
+                    }
+                }
+            } else {
+                alert('ખોટો OTP કોડ!');
+            }
+        }
+
+        function forceAddDefaultStudents() {
+            if(confirm('શું તમે તમામ વિદ્યાર્થીઓ ફાયરબેઝમાં ઉમેરવા માંગો છો?')) {
+                let batch = db.batch();
+                students.forEach(s => {
+                    let docRef = db.collection("students").doc();
+                    batch.set(docRef, s);
+                });
+                batch.commit().then(() => alert('વિદ્યાર્થીઓ ઉમેરાઈ ગયા!'));
+            }
+        }
+
+        function selectDivision(division) {
+            currentDivision = division;
+            document.getElementById('divisionSelectionSection').style.display = 'none';
+            document.getElementById('appNavbar').style.display = 'block';
+            document.getElementById('attendanceSection').style.display = 'block';
+
+            const stdSelect = document.getElementById('selectStd');
+            stdSelect.innerHTML = '';
+            let grades = division === 'primary' ? 
+                ['બાલવાટીકા', 'ધોરણ 1', 'ધોરણ 2', 'ધોરણ 3', 'ધોરણ 4', 'ધોરણ 5'] : 
+                ['ધોરણ 6', 'ધોરણ 7', 'ધોરણ 8'];
+
+            grades.forEach(g => {
+                let opt = document.createElement('option');
+                opt.value = g;
+                opt.innerText = g;
+                stdSelect.appendChild(opt);
+            });
+
+            document.getElementById('attendanceHeading').innerText = division === 'primary' ? 
+                '📋 દૈનિક હાજરી પૂરવી - પ્રાથમિક વિભાગ' : '📋 દૈનિક હાજરી પૂરવી - ઉચ્ચ પ્રાથમિક વિભાગ';
+            
+            loadClassStudentsForAttendance();
+        }
+
+        function backToDivisionSelection() {
+            document.getElementById('divisionSelectionSection').style.display = 'flex';
+            document.getElementById('appNavbar').style.display = 'none';
+            document.getElementById('attendanceSection').style.display = 'none';
+            document.getElementById('loginSection').style.display = 'none';
+            document.getElementById('adminDashboard').style.display = 'none';
+        }
+
+        function showSection(sectionId) {
+            document.getElementById('attendanceSection').style.display = 'none';
+            document.getElementById('loginSection').style.display = 'none';
+            document.getElementById('adminDashboard').style.display = 'none';
+            document.getElementById(sectionId).style.display = 'block';
+            
+            if(sectionId === 'adminDashboard') {
+                loadAdminData();
+            } else if(sectionId === 'attendanceSection') {
+                document.getElementById('attendanceSection').style.display = 'block';
+                loadClassStudentsForAttendance();
+            }
+        }
+
+        function adminLogin() {
+            const email = document.getElementById('adminEmailInput').value.trim();
+            const pass = document.getElementById('adminPasswordInput').value.trim();
+            if (email === adminEmail && pass === adminPass) {
+                document.getElementById('loginSection').style.display = 'none';
+                document.getElementById('adminDashboard').style.display = 'block';
+                loadAdminData();
+            } else {
+                alert('ખોટો ઇમેલ અથવા પાસવર્ડ!');
+            }
+        }
+
+        function logoutAdmin() {
+            document.getElementById('adminEmailInput').value = '';
+            document.getElementById('adminPasswordInput').value = '';
+            showSection('attendanceSection');
+        }
+
+        function updateAdminCredentials() {
+            const currPass = document.getElementById('currAdminPass').value.trim();
+            const newEmail = document.getElementById('newAdminEmail').value.trim();
+            const newPass = document.getElementById('newAdminPass').value.trim();
+            const confirmPass = document.getElementById('confirmAdminPass').value.trim();
+
+            if (currPass !== adminPass) { alert('ચાલુ પાસવર્ડ ખોટો છે!'); return; }
+            if (!newEmail || !newPass) { alert('ઇમેલ અને પાસવર્ડ ખાલી ન હોઈ શકે.'); return; }
+            if (newPass !== confirmPass) { alert('નવા પાસવર્ડ સરખા નથી!'); return; }
+
+            db.collection("admin").doc("credentials").set({ email: newEmail, pass: newPass }).then(() => {
+                adminEmail = newEmail;
+                adminPass = newPass;
+                alert('એડમિન વિગતો સફળતાપૂર્વક બદલાઈ ગઈ!');
+            });
+        }
+
+        function addStudent() {
+            const name = document.getElementById('newStudentName').value.trim();
+            const phone = document.getElementById('newStudentPhone').value.trim();
+            const std = document.getElementById('newStudentStd').value;
+            const sec = document.getElementById('newStudentSec').value;
+
+            if (name !== '') {
+                db.collection("students").add({ order: students.length + 1, name, std, sec, phone }).then(() => {
+                    document.getElementById('newStudentName').value = '';
+                    document.getElementById('newStudentPhone').value = '';
+                    alert('વિદ્યાર્થી ઉમેરાઈ ગયો!');
+                });
+            } else {
+                alert('નામ દાખલ કરો.');
+            }
+        }
+
+        function importJSONStudents() {
+            try {
+                let parsed = JSON.parse(document.getElementById('jsonStudentInput').value);
+                if (Array.isArray(parsed)) {
+                    parsed.forEach((s, idx) => {
+                        s.order = students.length + idx + 1;
+                        if(!s.phone) s.phone = "";
+                        db.collection("students").add(s);
+                    });
+                    document.getElementById('jsonStudentInput').value = '';
+                    alert('બલ્ક ઇમ્પોર્ટ સફળ!');
+                } else {
+                    alert('અમાન્ય JSON.');
+                }
+            } catch (e) {
+                alert('ભૂલ: ' + e.message);
+            }
+        }
+
+        function updateStudentPhoneQuick(docId) {
+            const inputEl = document.getElementById(`phone_input_${docId}`);
+            if(!inputEl) return;
+            db.collection("students").doc(docId).update({ phone: inputEl.value.trim() }).then(() => alert('નંબર અપડેટ થઈ ગયો!'));
+        }
+
+        function deleteStudent(docId) {
+            if (confirm('વિદ્યાર્થી હટાવવા માંગो છો?') && docId) {
+                db.collection("students").doc(docId).delete().then(() => alert('ડિલીટ થઈ ગયું.'));
+            }
+        }
+
+        function addHoliday() {
+            const hDate = document.getElementById('holidayDate').value;
+            const hReason = document.getElementById('holidayReason').value.trim();
+            if (!hDate || !hReason) { alert('તારીખ અને કારણ બંને ભરો.'); return; }
+            db.collection("holidays").add({ date: hDate, reason: hReason }).then(() => {
+                document.getElementById('holidayDate').value = '';
+                document.getElementById('holidayReason').value = '';
+                alert('રજા ઉમેરાઈ ગઈ!');
+            });
+        }
+
+        function loadHolidayList() {
+            const container = document.getElementById('holidayListContainer');
+            if(!container) return;
+            let html = '<ul class="mb-0">';
+            holidays.forEach(h => {
+                html += `<li>${formatDateToDDMMYYYY(h.date)} - ${h.reason}</li>`;
+            });
+            html += '</ul>';
+            container.innerHTML = html;
+        }
+
+        function checkHolidayWarning() {
+            const dateStr = document.getElementById('attendanceDate').value;
+            const warningEl = document.getElementById('holidayAlertMsg');
+            const submitBtn = document.getElementById('submitAttendanceBtn');
+            if (!dateStr || !warningEl) return;
+
+            const parts = dateStr.split('-');
+            const d = new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]));
+            let isSunday = (d.getDay() === 0);
+            let foundHoliday = holidays.find(h => h.date === dateStr);
+
+            if (isSunday || foundHoliday) {
+                warningEl.style.display = 'block';
+                warningEl.innerHTML = `🚫 પ્રતિબંધ: આ તારીખે રજા છે!`;
+                if(submitBtn) submitBtn.disabled = true;
+            } else {
+                warningEl.style.display = 'none';
+                if(submitBtn) submitBtn.disabled = false;
+            }
+            loadClassStudentsForAttendance();
+        }
+
+        function loadAdminStudentList() {
+            const stdFilter = document.getElementById('filterStudentStd')?.value || '';
+            const secFilter = document.getElementById('filterStudentSec')?.value || '';
+            const searchQuery = document.getElementById('adminSearchStudent')?.value.toLowerCase().trim() || '';
+            const listEl = document.getElementById('adminStudentListTable');
+            if(!listEl) return;
+
+            let filtered = students.filter(s => {
+                let matchStd = stdFilter ? (s.std || '').trim() === stdFilter.trim() : true;
+                let matchSec = secFilter ? (s.sec || '').trim() === secFilter.trim() : true;
+                let matchSearch = searchQuery ? s.name.toLowerCase().includes(searchQuery) : true;
+                return matchStd && matchSec && matchSearch;
+            });
+
+            let rowsHtml = '';
+            filtered.forEach((s) => {
+                rowsHtml += `
+                    <tr>
+                        <td class="fw-bold text-start ps-3 notranslate">${s.name}</td>
+                        <td>${s.std}</td>
+                        <td>${s.sec}</td>
+                        <td>
+                            <div class="input-group input-group-sm">
+                                <input type="text" id="phone_input_${s.id || s.name}" class="form-control" value="${s.phone || ''}">
+                                <button class="btn btn-outline-primary" onclick="updateStudentPhoneQuick('${s.id || s.name}')">સેવ</button>
+                            </div>
+                        </td>
+                        <td><button class="btn btn-danger btn-sm px-3" onclick="deleteStudent('${s.id || ''}')">ડિલીટ</button></td>
+                    </tr>`;
+            });
+            listEl.innerHTML = rowsHtml || '<tr><td colspan="5" class="text-center text-muted">કોઈ વિદ્યાર્થી નથી.</td></tr>';
+        }
+
+        function loadDailySummary() {
+            const date = document.getElementById('dailySummaryDate')?.value;
+            const std = document.getElementById('dailySummaryStd')?.value;
+            const sec = document.getElementById('dailySummarySec')?.value;
+            const resultDiv = document.getElementById('dailySummaryResult');
+            if (!date || !std || !sec || !resultDiv) return;
+
+            db.collection("attendance").where("date", "==", date).where("std", "==", std).where("sec", "==", sec).get().then((querySnapshot) => {
+                let records = [];
+                querySnapshot.forEach(doc => records.push(doc.data()));
+                const classStudents = students.filter(s => (s.std || '').trim() === std.trim() && (s.sec || '').trim() === sec.trim());
+                
+                let presentNames = [];
+                let absentNames = [];
+                classStudents.forEach(student => {
+                    let rec = records.find(r => (r.name || '').trim() === (student.name || '').trim());
+                    if (rec && rec.status === 'Present') presentNames.push(student.name);
+                    else absentNames.push(student.name);
+                });
+
+                document.getElementById('dsTotal').innerText = classStudents.length;
+                document.getElementById('dsPresent').innerText = presentNames.length;
+                document.getElementById('dsAbsent').innerText = absentNames.length;
+                document.getElementById('dsPercentage').innerText = classStudents.length > 0 ? ((presentNames.length / classStudents.length) * 100).toFixed(1) + '%' : '0%';
+                
+                document.getElementById('presentStudentsList').innerHTML = presentNames.map(n => `<li>${n}</li>`).join('') || '<li class="text-muted">કોઈ નહીં</li>';
+                document.getElementById('absentStudentsList').innerHTML = absentNames.map(n => `<li>${n}</li>`).join('') || '<li class="text-muted">કોઈ નહીં</li>';
+                resultDiv.style.display = 'block';
+            });
+        }
+
+        function resetDateAttendance() {
+            const date = document.getElementById('dailySummaryDate').value;
+            const std = document.getElementById('dailySummaryStd').value;
+            const sec = document.getElementById('dailySummarySec').value;
+            if(confirm('આ તારીખની હાજરી રીસેટ કરવા માંગો છો?')) {
+                db.collection("attendance").where("date", "==", date).where("std", "==", std).where("sec", "==", sec).get().then(snapshot => {
+                    let batch = db.batch();
+                    snapshot.forEach(doc => batch.delete(doc.ref));
+                    return batch.commit();
+                }).then(() => {
+                    alert('રીસેટ થઈ ગયું!');
+                    loadDailySummary();
+                });
+            }
+        }
+
+        function loadAdminData() {
+            loadAdminStudentList();
+            loadHolidayList();
+            loadDailySummary();
+            generateReport();
+        }
+
+        // LIGHTNING FAST INSTANT RENDER
+        function loadClassStudentsForAttendance() {
+            const std = document.getElementById('selectStd')?.value;
+            const sec = document.getElementById('selectSec')?.value;
+            const date = document.getElementById('attendanceDate')?.value;
+            const container = document.getElementById('studentAttendanceContainer');
+            const tbody = document.getElementById('attendanceTableBody');
+
+            if (!std || !sec || !date || !container || !tbody) return;
+
+            const cacheKey = `${std}_${sec}_${date}`;
+            const filteredStudents = students.filter(s => (s.std || '').trim() === std.trim() && (s.sec || '').trim() === sec.trim());
+
+            let rowsHtml = '';
+            filteredStudents.forEach((s, idx) => {
+                let currentStatus = (unsavedAttendanceCache[cacheKey] && unsavedAttendanceCache[cacheKey][s.name]) || 'Absent';
+                let presentActive = currentStatus === 'Present' ? 'btn-success' : 'btn-outline-success';
+                let absentActive = currentStatus === 'Absent' ? 'btn-danger' : 'btn-outline-danger';
+                let phoneDisplay = s.phone ? `<br><small class="text-muted">📱 ${s.phone}</small>` : `<br><small class="text-danger">નંબર નથી</small>`;
+                let waBtn = s.phone ? `<button class="btn btn-outline-success btn-sm" onclick="sendSmartWhatsApp('${s.name}', '${s.std}', '${s.sec}', '${s.phone}', '${date}')">💬 WhatsApp</button>` : `<span class="text-muted small">નંબર નથી</span>`;
+
+                rowsHtml += `
+                    <tr>
+                        <td>${idx + 1}</td>
+                        <td class="fw-bold text-start ps-3 notranslate">${s.name} ${phoneDisplay}</td>
+                        <td>
+                            <div class="btn-group shadow-sm" role="group">
+                                <button type="button" class="btn ${presentActive} btn-sm px-4" id="pres_${idx}" onclick="setStatus(event, '${s.name}', 'Present', ${idx})">હાજર</button>
+                                <button type="button" class="btn ${absentActive} btn-sm px-4" id="abs_${idx}" onclick="setStatus(event, '${s.name}', 'Absent', ${idx})">ગેરહાજર</button>
+                            </div>
+                            <input type="hidden" id="status_val_${idx}" class="attendance-status-val" data-name="${s.name}" data-std="${s.std}" data-sec="${s.sec}" value="${currentStatus}">
+                        </td>
+                        <td>${waBtn}</td>
+                    </tr>`;
+            });
+
+            tbody.innerHTML = rowsHtml || '<tr><td colspan="4" class="text-center text-muted">કોઈ વિદ્યાર્થી નથી.</td></tr>';
+            container.style.display = 'block';
+            updateAttendanceSummary();
+            checkHolidayWarning();
+
+            // Background fetch
+            db.collection("attendance").where("date", "==", date).where("std", "==", std).where("sec", "==", sec).get().then((querySnapshot) => {
+                if(!querySnapshot.empty) {
+                    querySnapshot.forEach((doc) => {
+                        let rec = doc.data();
+                        filteredStudents.forEach((s, idx) => {
+                            if((s.name || '').trim() === (rec.name || '').trim()) {
+                                let hiddenInput = document.getElementById(`status_val_${idx}`);
+                                let presBtn = document.getElementById(`pres_${idx}`);
+                                let absBtn = document.getElementById(`abs_${idx}`);
+                                if(hiddenInput && presBtn && absBtn) {
+                                    hiddenInput.value = rec.status;
+                                    if(rec.status === 'Present') {
+                                        presBtn.className = 'btn btn-success btn-sm px-4';
+                                        absBtn.className = 'btn btn-outline-danger btn-sm px-4';
+                                    } else {
+                                        presBtn.className = 'btn btn-outline-success btn-sm px-4';
+                                        absBtn.className = 'btn btn-danger btn-sm px-4';
+                                    }
+                                }
+                            }
+                        });
+                        updateAttendanceSummary();
+                    });
+                }
+            }).catch(err => {});
+        }
+
+        function sendSmartWhatsApp(studentName, std, sec, phone, currentDate) {
+            if(!phone) { alert('નંબર નથી.'); return; }
+            let msg = `નમસ્કાર વાલીશ્રી, ખંડેવાળ પ્રાથમિક શાળા તરફથી જણાવવાનું કે આપનું બાળક ${studentName} (${std}) આજે શાળામાં ગેરહાજર છે. 🙏`;
+            window.open(`https://wa.me/91${phone}?text=${encodeURIComponent(msg)}`, '_blank');
+        }
+
+        function setStatus(event, studentName, status, idx) {
+            let presBtn = document.getElementById(`pres_${idx}`);
+            let absBtn = document.getElementById(`abs_${idx}`);
+            let hiddenInput = document.getElementById(`status_val_${idx}`);
+            if(!hiddenInput) return;
+            hiddenInput.value = status;
+
+            if (status === 'Present') {
+                triggerBubble(event, '✅');
+                presBtn.className = 'btn btn-success btn-sm px-4';
+                absBtn.className = 'btn btn-outline-danger btn-sm px-4';
+            } else {
+                presBtn.className = 'btn btn-outline-success btn-sm px-4';
+                absBtn.className = 'btn btn-danger btn-sm px-4';
+            }
+
+            const std = document.getElementById('selectStd').value;
+            const sec = document.getElementById('selectSec').value;
+            const date = document.getElementById('attendanceDate').value;
+            const cacheKey = `${std}_${sec}_${date}`;
+
+            if (!unsavedAttendanceCache[cacheKey]) unsavedAttendanceCache[cacheKey] = {};
+            unsavedAttendanceCache[cacheKey][studentName] = status;
+            updateAttendanceSummary();
+        }
+
+        function triggerBubble(event, emoji) {
+            const bubble = document.createElement('div');
+            bubble.className = 'floating-bubble';
+            bubble.innerText = emoji;
+            bubble.style.left = event.clientX + 'px';
+            bubble.style.top = (event.clientY - 10) + 'px';
+            document.body.appendChild(bubble);
+            setTimeout(() => bubble.remove(), 800);
+        }
+
+        function updateAttendanceSummary() {
+            const inputs = document.querySelectorAll('.attendance-status-val');
+            let present = 0, absent = 0;
+            inputs.forEach(el => {
+                if (el.value === 'Present') present++;
+                else absent++;
+            });
+            document.getElementById('lblTotal').innerText = inputs.length;
+            document.getElementById('lblPresent').innerText = present;
+            document.getElementById('lblAbsent').innerText = absent;
+        }
+
+        function saveBulkAttendance() {
+            const date = document.getElementById('attendanceDate').value;
+            const std = document.getElementById('selectStd').value;
+            const sec = document.getElementById('selectSec').value;
+            if (!date) { alert('તારીખ પસંદ કરો.'); return; }
+
+            const inputs = document.querySelectorAll('.attendance-status-val');
+            const parts = date.split('-');
+            const months = ['જાન્યુઆરી', 'ફેબ્રુઆરી', 'માર્ચ', 'એપ્રિલ', 'મે', 'જૂન', 'જુલાઈ', 'ઓગસ્ટ', 'સપ્ટેમ્બર', 'ઓક્ટોબર', 'નવેમ્બર', 'ડિસેમ્બર'];
+            const monthName = months[parseInt(parts[1]) - 1];
+            const yearName = parts[0];
+
+            let promises = [];
+            inputs.forEach(el => {
+                const record = {
+                    name: el.getAttribute('data-name'),
+                    std: std,
+                    sec: sec,
+                    date: date,
+                    status: el.value,
+                    month: monthName,
+                    year: yearName
+                };
+                promises.push(db.collection("attendance").add(record));
+            });
+
+            Promise.all(promises).then(() => {
+                alert('હાજરી સફળતાપૂર્વક સબમિટ થઈ ગઈ!');
+                loadDailySummary();
+                generateReport();
+            }).catch(err => alert('ભૂલ: ' + err.message));
+        }
+
+        function getWorkingDaysInMonth(year, monthName) {
+            const monthsMap = {'જાન્યુઆરી': 0, 'ફેબ્રુઆરી': 1, 'માર્ચ': 2, 'એપ્રિલ': 3, 'મે': 4, 'જૂન': 5, 'જુલાઈ': 6, 'ઓગસ્ટ': 7, 'સપ્ટેમ્બર': 8, 'ઓક્ટોબર': 9, 'નવેમ્બર': 10, 'ડિસેમ્બર': 11};
+            let mIndex = monthsMap[monthName];
+            let date = new Date(parseInt(year), mIndex, 1);
+            let workingDays = 0;
+            let holidayDates = holidays.map(h => h.date);
+
+            while (date.getMonth() === mIndex) {
+                if (date.getDay() !== 0 && !holidayDates.includes(getLocalDateString(date))) {
+                    workingDays++;
+                }
+                date.setDate(date.getDate() + 1);
+            }
+            return workingDays;
+        }
+
+        let cachedReportData = [];
+
+        function generateReport() {
+            const month = document.getElementById('reportMonth')?.value;
+            const year = document.getElementById('reportYear')?.value.trim();
+            const std = document.getElementById('reportStd')?.value;
+            const sec = document.getElementById('reportSec')?.value;
+            const tableBody = document.getElementById('attendanceReportTable');
+            const topContainer = document.getElementById('topStudentsContainer');
+            if(!tableBody || !topContainer) return;
+
+            db.collection("attendance").where("month", "==", month).where("std", "==", std).where("sec", "==", sec).get().then((querySnapshot) => {
+                let monthRecords = [];
+                querySnapshot.forEach(doc => {
+                    let d = doc.data();
+                    if(String(d.year || '').trim() === year) monthRecords.push(d);
+                });
+
+                const classStudents = students.filter(s => (s.std || '').trim() === std.trim() && (s.sec || '').trim() === sec.trim());
+                const totalWorkingDays = getWorkingDaysInMonth(year, month);
+                let reportData = [];
+
+                classStudents.forEach(student => {
+                    let presentSet = new Set(monthRecords.filter(r => (r.name || '').trim() === (student.name || '').trim() && r.status === 'Present').map(r => r.date));
+                    let presentDays = presentSet.size;
+                    let percentage = totalWorkingDays > 0 ? ((presentDays / totalWorkingDays) * 100).toFixed(1) : 0;
+                    reportData.push({ name: student.name, phone: student.phone || '', presentDays, totalWorkingDays, percentage: parseFloat(percentage) });
+                });
+
+                reportData.sort((a, b) => b.presentDays - a.presentDays);
+                cachedReportData = reportData;
+
+                let rowsHtml = '';
+                reportData.forEach(r => {
+                    let waBtn = r.phone ? `<a href="https://wa.me/91${r.phone}?text=${encodeURIComponent('આપનું બાળક ' + r.name + ' એ ' + month + ' માં ' + r.presentDays + '/' + r.totalWorkingDays + ' દિવસ હાજર રહ્યું છે.')}" target="_blank" class="btn btn-success btn-sm">📤 WhatsApp</a>` : '-';
+                    rowsHtml += `<tr><td class="fw-bold notranslate">${r.name}</td><td>${r.phone || '-'}</td><td>${r.presentDays}</td><td>${r.totalWorkingDays}</td><td class="fw-bold text-success">${r.percentage}%</td><td>${waBtn}</td></tr>`;
+                });
+                tableBody.innerHTML = rowsHtml || '<tr><td colspan="6" class="text-center text-muted">કોઈ ડેટા નથી.</td></tr>';
+
+                let perfect = reportData.filter(r => r.totalWorkingDays > 0 && r.presentDays === r.totalWorkingDays);
+                let certHtml = '';
+                perfect.forEach(p => {
+                    certHtml += `<div class="col-md-4 mb-3"><div class="certificate-box"><h4 class="text-danger fw-bold">🌟 ૧૦૦% હાજરી સન્માન 🌟</h4><h3 class="fw-bold text-dark my-2 notranslate">${p.name}</h3><p class="small text-muted">${month} ${year}</p></div></div>`;
+                });
+                topContainer.innerHTML = certHtml || '<div class="col-12 text-center text-muted">૧૦૦% હાજરી વાળું કોઈ બાળક નથી.</div>';
+            });
+        }
+
+        function sendBulkMonthlyWhatsApp() {
+            if(cachedReportData.length === 0) { alert('કોઈ ડેટા નથી!'); return; }
+            let count = 0;
+            cachedReportData.forEach(r => {
+                if(r.phone) {
+                    count++;
+                    let msg = `નમસ્કાર વાલીશ્રી, આપનું બાળક ${r.name} હાજરી: ${r.percentage}%. 🙏`;
+                    setTimeout(() => window.open(`https://wa.me/91${r.phone}?text=${encodeURIComponent(msg)}`, '_blank'), count * 500);
+                }
+            });
+            alert(`${count} વાલીઓના મેસેજ ઓપન થઈ રહ્યા છે.`);
+        }
+
+        function downloadExcelCSV() {
+            let table = document.getElementById("reportTableElement");
+            if(!table) return;
+            let csv = [];
+            table.querySelectorAll("tr").forEach(row => {
+                let r = [];
+                row.querySelectorAll("td, th").forEach(col => r.push('"' + col.innerText + '"'));
+                csv.push(r.join(","));
+            });
+            let blob = new Blob(["\ufeff" + csv.join("\n")], { type: 'text/csv;charset=utf-8;' });
+            let link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.download = `Attendance_Report.csv`;
+            link.click();
+        }
+    </script>
+</body>
+</html>
